@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+      <li><a href="/frontend/pages/insights.html">Insights</a></li>
+      <li><a href="/frontend/pages/history.html">History</a></li>
+      <li><a href="/frontend/pages/premium.html" class="active">Premium</a></li>
+    </ul>
+    <div class="nav-actions"></div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <li><a href="/frontend/pages/dashboard.html"><span class="icon">🏠</span> Dashboard</a></li>
+        <li><a href="/frontend/pages/insights.html"><span class="icon">🧠</span> Insights</a></li>
+        <li><a href="/frontend/pages/history.html"><span class="icon">📋</span> History</a></li>
+        <li><a href="/frontend/pages/bmi.html"><span class="icon">📊</span> BMI Calculator</a></li>
+        <div class="sidebar-section-label">Account</div>
+        <li><a href="/frontend/pages/profile.html"><span class="icon">👤</span> Profile</a></li>
+        <li><a href="/frontend/pages/premium.html" class="active"><span class="icon">⭐</span> Premium</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="premium-header">
+        <span class="section-tag">Upgrade</span>
+        <h1 class="section-title">Choose your <span style="color:var(--teal-300)">HealthFlow</span> plan</h1>
+        <p class="section-sub" style="margin:0 auto;text-align:center">Start free, upgrade when you're ready. No hidden
+          fees. Cancel anytime.</p>
+      </div>
+
+      <div class="premium-grid" style="margin-top:3rem">
+        <!-- Free -->
+        <div class="plan-card glass animate-in delay-1">
+          <div class="plan-name">Free</div>
+          <div class="plan-price"><span>$</span>0</div>
+          <div class="plan-period">Forever free</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Daily health logging</li>
+            <li><span class="check">✓</span> Water tracker (8 cups)</li>
+            <li><span class="check">✓</span> Steps tracker</li>
+            <li><span class="check">✓</span> Mood journaling</li>
+            <li><span class="check">✓</span> BMI calculator</li>
+            <li><span class="check">✓</span> 7-day history</li>
+            <li><span class="x">✗</span> Advanced analytics</li>
+            <li><span class="x">✗</span> Export data</li>
+            <li><span class="x">✗</span> AI health insights</li>
+          </ul>
+          <button class="btn btn-ghost w-full" onclick="showToast('You\'re on the Free plan', 'info')">Current
+            Plan</button>
+        </div>
+
+        <!-- Pro — Featured -->
+        <div class="plan-card glass featured animate-in delay-2">
+          <div class="plan-badge">⭐ Most Popular</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price"><span>$</span>9</div>
+          <div class="plan-period">per month · billed monthly</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Everything in Free</li>
+            <li><span class="check">✓</span> Unlimited history</li>
+            <li><span class="check">✓</span> Advanced charts & trends</li>
+            <li><span class="check">✓</span> Weekly health reports</li>
+            <li><span class="check">✓</span> Sleep quality tracking</li>
+            <li><span class="check">✓</span> Export data (CSV/PDF)</li>
+            <li><span class="check">✓</span> AI health insights</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <button class="btn btn-primary w-full" onclick="handleUpgrade('pro')">
+            🚀 Upgrade to Pro
+          </button>
+        </div>
+
+        <!-- Team -->
+        <div class="plan-card glass animate-in delay-3">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price"><span>$</span>29</div>
+          <div class="plan-period">per month · up to 10 users</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Everything in Pro</li>
+            <li><span class="check">✓</span> Team dashboard</li>
+            <li><span class="check">✓</span> Admin controls</li>
+            <li><span class="check">✓</span> Custom branding</li>
+            <li><span class="check">✓</span> API access</li>
+            <li><span class="check">✓</span> SSO / SAML</li>
+            <li><span class="check">✓</span> Dedicated support</li>
+            <li><span class="check">✓</span> SLA guarantee</li>
+          </ul>
+          <button class="btn btn-ghost w-full" onclick="showToast('Contact sales@healthflow.app', 'info', 5000)">
+            Contact Sales
+          </button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="container" style="max-width:700px;margin:4rem auto 0">
+        <h2
+          style="font-family:var(--font-display);font-size:1.6rem;font-weight:800;text-align:center;margin-bottom:2rem">
+          Frequently Asked Questions</h2>
+        <div style="display:flex;flex-direction:column;gap:14px" id="faqList">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    const faqs = [
+      { q: 'Can I cancel anytime?', a: 'Yes! You can cancel your subscription at any time. You\'ll continue to have access until the end of your billing period.' },
+      { q: 'Is my health data secure?', a: 'Absolutely. Your data is encrypted at rest and in transit. We never sell your personal health data to third parties.' },
+      { q: 'What payment methods do you accept?', a: 'We accept all major credit and debit cards (Visa, Mastercard, AMEX) as well as UPI and net banking for Indian users.' },
+      { q: 'Can I use HealthFlow on mobile?', a: 'HealthFlow is fully mobile-responsive and works great on all devices. A dedicated mobile app is coming soon!' },
+      { q: 'Is there a free trial for Pro?', a: 'Yes! New users get a 14-day free trial of HealthFlow Pro. No credit card required.' },
+    ];
+
+    document.getElementById('faqList').innerHTML = faqs.map(f => `
+    <div class="glass" style="padding:20px 24px;cursor:pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+      <div style="display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:0.95rem">
+        ${f.q} <span>+</span>
+      </div>
+      <div class="faq-answer hidden" style="margin-top:12px;color:rgba(200,242,247,0.6);font-size:0.88rem;line-height:1.65">${f.a}</div>
+    </div>`).join('');
+
+    function handleUpgrade(plan) {
+      if (!Auth.isLoggedIn()) {
+        showToast('Please login to upgrade', 'error');
+        setTimeout(() => window.location.href = '/frontend/pages/login.html', 1000);
+        return;
+      }
+      // In a real app, this would redirect to Stripe/payment
+      showToast('🎉 Payment integration coming soon! This is a UI demo.', 'info', 5000);
+    }
+  </script>
+</body>
+
+</html>

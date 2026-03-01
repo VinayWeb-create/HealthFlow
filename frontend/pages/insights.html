@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Insights — HealthFlow</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/frontend/main.html" class="nav-logo">
+            <div class="nav-logo-icon">💚</div>
+            <span class="nav-logo-text">HealthFlow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+            <li><a href="/frontend/pages/insights.html" class="active">Insights</a></li>
+            <li><a href="/frontend/pages/history.html">History</a></li>
+            <li><a href="/frontend/pages/profile.html">Profile</a></li>
+        </ul>
+        <div class="nav-actions"></div>
+        <div class="hamburger"><span></span><span></span><span></span></div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <div class="sidebar-section-label">Main</div>
+                <li><a href="/frontend/pages/dashboard.html"><span class="icon">🏠</span> Dashboard</a></li>
+                <li><a href="/frontend/pages/insights.html" class="active"><span class="icon">🧠</span> Insights</a>
+                </li>
+                <li><a href="/frontend/pages/history.html"><span class="icon">📋</span> History</a></li>
+                <li><a href="/frontend/pages/bmi.html"><span class="icon">📊</span> BMI Calculator</a></li>
+                <div class="sidebar-section-label">Account</div>
+                <li><a href="/frontend/pages/profile.html"><span class="icon">👤</span> Profile</a></li>
+                <li><a href="/frontend/pages/premium.html"><span class="icon">⭐</span> Premium</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">🧠 Health Insights</h1>
+                <p class="page-subtitle">Smart analytics from your last 30 days of health data</p>
+            </div>
+
+            <!-- AVERAGES CARDS -->
+            <div class="insights-grid" id="avgCards">
+                <div class="insight-stat-card glass animate-in delay-1">
+                    <div class="insight-stat-icon">💧</div>
+                    <div class="insight-stat-val text-teal" id="avgWater">—</div>
+                    <div class="insight-stat-label">Avg Water / day</div>
+                </div>
+                <div class="insight-stat-card glass animate-in delay-2">
+                    <div class="insight-stat-icon">👟</div>
+                    <div class="insight-stat-val text-lime" id="avgSteps">—</div>
+                    <div class="insight-stat-label">Avg Steps / day</div>
+                </div>
+                <div class="insight-stat-card glass animate-in delay-3">
+                    <div class="insight-stat-icon">😴</div>
+                    <div class="insight-stat-val" style="color:var(--amber-400)" id="avgSleep">—</div>
+                    <div class="insight-stat-label">Avg Sleep / night</div>
+                </div>
+                <div class="insight-stat-card glass animate-in delay-4">
+                    <div class="insight-stat-icon">🔥</div>
+                    <div class="insight-stat-val" style="color:var(--coral-400)" id="streakDisplay">0</div>
+                    <div class="insight-stat-label">Day Streak</div>
+                </div>
+            </div>
+
+            <!-- ROW 2: TREND CHART + TIPS -->
+            <div class="insights-row">
+                <div class="section-card glass animate-in delay-2">
+                    <div class="card-title">📈 30-Day Trends</div>
+                    <div class="trend-tabs" id="trendTabs">
+                        <button class="trend-tab active" data-metric="steps">Steps</button>
+                        <button class="trend-tab" data-metric="water">Water</button>
+                        <button class="trend-tab" data-metric="sleep">Sleep</button>
+                        <button class="trend-tab" data-metric="mood">Mood</button>
+                        <button class="trend-tab" data-metric="weight">Weight</button>
+                    </div>
+                    <div class="trend-chart-container">
+                        <div class="trend-chart-area" id="trendChart"></div>
+                        <div class="trend-labels" id="trendLabels"></div>
+                    </div>
+                </div>
+
+                <div class="section-card glass animate-in delay-3">
+                    <div class="card-title">💡 Smart Tips</div>
+                    <div class="tips-list" id="tipsList">
+                        <div class="text-muted" style="font-size:0.85rem">Loading insights...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 3: PERSONAL BESTS + MOOD OVERVIEW -->
+            <div class="insights-row">
+                <div class="section-card glass animate-in delay-3">
+                    <div class="card-title">🏆 Personal Bests (30 days)</div>
+                    <div class="bests-grid" id="bestsGrid">
+                        <div class="best-item">
+                            <div class="best-item-icon">👟</div>
+                            <div class="best-item-val" id="bestSteps">—</div>
+                            <div class="best-item-label">Max Steps</div>
+                        </div>
+                        <div class="best-item">
+                            <div class="best-item-icon">😴</div>
+                            <div class="best-item-val" id="bestSleep">—</div>
+                            <div class="best-item-label">Best Sleep</div>
+                        </div>
+                        <div class="best-item">
+                            <div class="best-item-icon">💧</div>
+                            <div class="best-item-val" id="bestWater">—</div>
+                            <div class="best-item-label">Max Water</div>
+                        </div>
+                        <div class="best-item">
+                            <div class="best-item-icon">😊</div>
+                            <div class="best-item-val" id="bestMood">—</div>
+                            <div class="best-item-label">Best Mood</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card glass animate-in delay-4">
+                    <div class="card-title">📊 Mood Distribution</div>
+                    <div id="moodDistribution" style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+                        <div class="text-muted" style="font-size:0.85rem">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW: CORRELATIONS -->
+            <div class="insights-row">
+                <div class="section-card glass animate-in delay-4" style="flex:1">
+                    <div class="card-title">🧠 Smart Correlations</div>
+                    <div id="correlationsList" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px">
+                        <div class="text-muted" style="font-size:0.85rem">Log more data to see patterns...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        if (!Auth.requireAuth()) throw new Error('Not authenticated');
+
+        const moodEmojis = { 1: '😣', 2: '😕', 3: '😐', 4: '😊', 5: '😄' };
+        const metricColors = {
+            steps: 'var(--lime-400)', water: 'var(--teal-400)',
+            sleep: 'var(--amber-400)', mood: 'var(--coral-400)', weight: 'var(--purple-400)',
+        };
+        let insightsData = null;
+        let currentMetric = 'steps';
+
+        async function loadInsights() {
+            const { ok, data } = await api.get('/get-insights');
+            if (!ok) { showToast('Failed to load insights', 'error'); return; }
+            insightsData = data;
+
+            // Averages
+            const avg = data.averages || {};
+            document.getElementById('avgWater').textContent = avg.water != null ? avg.water + ' 🥛' : '—';
+            document.getElementById('avgSteps').textContent = avg.steps != null ? Math.round(avg.steps).toLocaleString() : '—';
+            document.getElementById('avgSleep').textContent = avg.sleep != null ? avg.sleep + 'h' : '—';
+            document.getElementById('streakDisplay').textContent = data.streak || 0;
+
+            // Personal Bests
+            const pb = data.personal_bests || {};
+            document.getElementById('bestSteps').textContent = pb.max_steps != null ? pb.max_steps.toLocaleString() : '—';
+            document.getElementById('bestSleep').textContent = pb.best_sleep != null ? pb.best_sleep + 'h' : '—';
+            document.getElementById('bestWater').textContent = pb.max_water != null ? pb.max_water + ' 🥛' : '—';
+            document.getElementById('bestMood').textContent = pb.best_mood != null ? moodEmojis[pb.best_mood] || pb.best_mood : '—';
+
+            // Tips
+            renderTips(data.tips || []);
+
+            // Trend chart
+            renderTrendChart('steps');
+
+            // Mood distribution
+            renderMoodDistribution(data.trends || []);
+
+            // Correlations
+            renderCorrelations(data.correlations || []);
+        }
+
+        function renderCorrelations(corrs) {
+            const container = document.getElementById('correlationsList');
+            if (!corrs.length) {
+                container.innerHTML = '<div class="text-muted" style="font-size:0.85rem">More data needed to find correlations. Keep logging!</div>';
+                return;
+            }
+            container.innerHTML = corrs.map(c => `<div class="tip-card" style="border-left-color:var(--purple-400);flex:1;min-width:280px">${c}</div>`).join('');
+        }
+
+        function renderTips(tips) {
+            const container = document.getElementById('tipsList');
+            if (!tips.length) {
+                container.innerHTML = '<div class="text-muted" style="font-size:0.85rem">Log more data to get personalized tips!</div>';
+                return;
+            }
+            container.innerHTML = tips.map(t => `<div class="tip-card">${t}</div>`).join('');
+        }
+
+        function renderTrendChart(metric) {
+            currentMetric = metric;
+            const trends = insightsData?.trends || [];
+            const chart = document.getElementById('trendChart');
+            const labels = document.getElementById('trendLabels');
+
+            if (!trends.length) {
+                chart.innerHTML = '<div class="text-muted" style="font-size:0.85rem;margin:auto">No data yet</div>';
+                labels.innerHTML = '';
+                return;
+            }
+
+            const vals = trends.map(t => t[metric] || 0);
+            const maxVal = Math.max(...vals, 1);
+
+            chart.innerHTML = vals.map((v, i) => {
+                const pct = (v / maxVal) * 100;
+                const color = metricColors[metric];
+                const dateStr = trends[i].date ? new Date(trends[i].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+                let label = v;
+                if (metric === 'steps') label = v.toLocaleString();
+                else if (metric === 'sleep') label = v + 'h';
+                else if (metric === 'mood') label = moodEmojis[v] || v;
+                else if (metric === 'weight') label = v + 'kg';
+                return `<div class="trend-bar" style="height:${Math.max(pct, 3)}%;background:${color}" data-tooltip="${dateStr}: ${label}"></div>`;
+            }).join('');
+
+            // labels — show first, middle, last
+            if (trends.length >= 2) {
+                const first = trends[0].date ? new Date(trends[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+                const last = trends[trends.length - 1].date ? new Date(trends[trends.length - 1].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+                labels.innerHTML = `<span>${first}</span><span>${last}</span>`;
+            }
+
+            // Update active tab
+            document.querySelectorAll('.trend-tab').forEach(t => t.classList.toggle('active', t.dataset.metric === metric));
+        }
+
+        function renderMoodDistribution(trends) {
+            const container = document.getElementById('moodDistribution');
+            const moodCounts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            let total = 0;
+            trends.forEach(t => {
+                if (t.mood) { moodCounts[t.mood]++; total++; }
+            });
+
+            if (total === 0) {
+                container.innerHTML = '<div class="text-muted" style="font-size:0.85rem">No mood data yet</div>';
+                return;
+            }
+
+            const moodLabels = { 1: 'Very Bad', 2: 'Bad', 3: 'Neutral', 4: 'Good', 5: 'Great' };
+            const moodColors = {
+                1: 'var(--coral-400)', 2: '#f97316', 3: 'var(--amber-400)',
+                4: 'var(--lime-400)', 5: 'var(--teal-300)',
+            };
+
+            container.innerHTML = [5, 4, 3, 2, 1].map(m => {
+                const pct = Math.round((moodCounts[m] / total) * 100);
+                return `
+        <div style="display:flex;align-items:center;gap:10px;font-size:0.85rem">
+          <span style="width:28px;text-align:center">${moodEmojis[m]}</span>
+          <span style="width:60px;color:rgba(200,242,247,0.5)">${moodLabels[m]}</span>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:10px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${moodColors[m]};border-radius:10px;transition:width 1s ease"></div>
+          </div>
+          <span style="width:36px;text-align:right;font-weight:600;color:${moodColors[m]}">${pct}%</span>
+        </div>`;
+            }).join('');
+        }
+
+        // Tab clicks
+        document.getElementById('trendTabs').addEventListener('click', e => {
+            const tab = e.target.closest('.trend-tab');
+            if (tab && insightsData) renderTrendChart(tab.dataset.metric);
+        });
+
+        loadInsights();
+    </script>
+</body>
+
+</html>

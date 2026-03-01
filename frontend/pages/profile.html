@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+      <li><a href="/frontend/pages/insights.html">Insights</a></li>
+      <li><a href="/frontend/pages/history.html">History</a></li>
+      <li><a href="/frontend/pages/profile.html" class="active">Profile</a></li>
+    </ul>
+    <div class="nav-actions"></div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <li><a href="/frontend/pages/dashboard.html"><span class="icon">🏠</span> Dashboard</a></li>
+        <li><a href="/frontend/pages/insights.html"><span class="icon">🧠</span> Insights</a></li>
+        <li><a href="/frontend/pages/history.html"><span class="icon">📋</span> History</a></li>
+        <li><a href="/frontend/pages/bmi.html"><span class="icon">📊</span> BMI Calculator</a></li>
+        <div class="sidebar-section-label">Account</div>
+        <li><a href="/frontend/pages/profile.html" class="active"><span class="icon">👤</span> Profile</a></li>
+        <li><a href="/frontend/pages/premium.html"><span class="icon">⭐</span> Premium</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">👤 Your Profile</h1>
+        <p class="page-subtitle">Manage your personal information and health settings</p>
+      </div>
+
+      <div class="profile-layout">
+        <!-- Profile Sidebar Card -->
+        <div class="profile-sidebar glass animate-in">
+          <div class="profile-avatar-lg" id="profileAvatarLg">?</div>
+          <div class="profile-name" id="profileName">Loading...</div>
+          <div class="profile-email" id="profileEmail">—</div>
+          <div class="profile-plan" id="profilePlan">Free Plan</div>
+          <div class="profile-stats-mini">
+            <div class="profile-stat-mini">
+              <span class="profile-stat-mini-label">Age</span>
+              <span class="profile-stat-mini-val" id="statAge">—</span>
+            </div>
+            <div class="profile-stat-mini">
+              <span class="profile-stat-mini-label">Height</span>
+              <span class="profile-stat-mini-val" id="statHeight">—</span>
+            </div>
+            <div class="profile-stat-mini">
+              <span class="profile-stat-mini-label">Weight</span>
+              <span class="profile-stat-mini-val" id="statWeight">—</span>
+            </div>
+            <div class="profile-stat-mini">
+              <span class="profile-stat-mini-label">Gender</span>
+              <span class="profile-stat-mini-val" id="statGender">—</span>
+            </div>
+            <div class="profile-stat-mini">
+              <span class="profile-stat-mini-label">Member Since</span>
+              <span class="profile-stat-mini-val" id="statJoined">—</span>
+            </div>
+          </div>
+          <a href="/frontend/pages/premium.html" class="btn btn-lime w-full" style="margin-top:20px;font-size:0.85rem">
+            ⭐ Upgrade to Pro
+          </a>
+        </div>
+
+        <!-- Edit Form -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <div class="section-card glass animate-in delay-1">
+            <div class="card-title">✏️ Edit Profile</div>
+            <div class="form-error" id="errorMsg"></div>
+            <div class="form-success" id="successMsg"></div>
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" id="nameInput" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email (read-only)</label>
+              <input type="email" class="form-input" id="emailInput" placeholder="Email"
+                style="opacity:0.6;cursor:not-allowed" readonly>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Age</label>
+                <input type="number" class="form-input" id="ageInput" placeholder="25" min="10" max="120">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Gender</label>
+                <select class="form-input" id="genderInput">
+                  <option value="">Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Height (cm)</label>
+                <input type="number" class="form-input" id="heightInput" placeholder="170" min="100" max="250">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Weight (kg)</label>
+                <input type="number" class="form-input" id="weightInput" placeholder="70" min="30" max="300" step="0.1">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="saveProfileBtn" style="height:44px;margin-top:8px;min-width:160px">
+              <span id="btnText">💾 Save Changes</span>
+              <span class="loader hidden" id="btnLoader"></span>
+            </button>
+          </div>
+
+          <!-- Change Password -->
+          <div class="section-card glass animate-in delay-2">
+            <div class="card-title">🔒 Change Password</div>
+            <div class="form-error" id="pwErrorMsg"></div>
+            <div class="form-success" id="pwSuccessMsg"></div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-input" id="newPassword" placeholder="Min. 6 characters">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" class="form-input" id="confirmPassword" placeholder="Repeat password">
+            </div>
+            <button class="btn btn-ghost" id="changePwBtn" style="height:40px;font-size:0.88rem">
+              Update Password
+            </button>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="section-card glass animate-in delay-3" style="border-color:rgba(251,113,133,0.2)">
+            <div class="card-title" style="color:var(--coral-400)">⚠️ Account</div>
+            <p style="font-size:0.88rem;color:rgba(200,242,247,0.55);margin-bottom:16px">
+              Log out from all devices or manage your subscription.
+            </p>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn"
+              style="border-color:rgba(251,113,133,0.25);color:var(--coral-400)">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    if (!Auth.requireAuth()) throw new Error('Not authenticated');
+
+    function showMsg(id, msg, type) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.className = type === 'error' ? 'form-error show' : 'form-success show';
+      setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    async function loadProfile() {
+      const { ok, data } = await api.get('/profile');
+      if (!ok) return;
+      const u = data.user;
+      const initials = u.name ? u.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : '?';
+      document.getElementById('profileAvatarLg').textContent = initials;
+      document.getElementById('profileName').textContent = u.name || '—';
+      document.getElementById('profileEmail').textContent = u.email || '—';
+      document.getElementById('profilePlan').textContent = u.plan === 'pro' ? '⭐ Pro Plan' : 'Free Plan';
+      document.getElementById('statAge').textContent = u.age ? u.age + ' yrs' : '—';
+      document.getElementById('statHeight').textContent = u.height ? u.height + ' cm' : '—';
+      document.getElementById('statWeight').textContent = u.weight ? u.weight + ' kg' : '—';
+      document.getElementById('statGender').textContent = u.gender ? u.gender.charAt(0).toUpperCase() + u.gender.slice(1) : '—';
+      document.getElementById('statJoined').textContent = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '—';
+      // Fill form
+      document.getElementById('nameInput').value = u.name || '';
+      document.getElementById('emailInput').value = u.email || '';
+      document.getElementById('ageInput').value = u.age || '';
+      document.getElementById('genderInput').value = u.gender || '';
+      document.getElementById('heightInput').value = u.height || '';
+      document.getElementById('weightInput').value = u.weight || '';
+      Auth.setUser(u);
+    }
+
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+      const name = document.getElementById('nameInput').value.trim();
+      const age = +document.getElementById('ageInput').value;
+      const gender = document.getElementById('genderInput').value;
+      const height = +document.getElementById('heightInput').value;
+      const weight = +document.getElementById('weightInput').value;
+      if (!name) return showMsg('errorMsg', 'Name cannot be empty.', 'error');
+      document.getElementById('btnText').classList.add('hidden');
+      document.getElementById('btnLoader').classList.remove('hidden');
+      const { ok, data } = await api.post('/update-profile', { name, age, gender, height, weight });
+      document.getElementById('btnText').classList.remove('hidden');
+      document.getElementById('btnLoader').classList.add('hidden');
+      if (ok) { showMsg('successMsg', 'Profile updated!', 'success'); loadProfile(); showToast('Profile saved! 👤', 'success'); }
+      else showMsg('errorMsg', data.error || 'Update failed', 'error');
+    });
+
+    document.getElementById('changePwBtn').addEventListener('click', async () => {
+      const pw = document.getElementById('newPassword').value;
+      const cpw = document.getElementById('confirmPassword').value;
+      if (pw.length < 6) return showMsg('pwErrorMsg', 'Password must be at least 6 characters.', 'error');
+      if (pw !== cpw) return showMsg('pwErrorMsg', 'Passwords do not match.', 'error');
+      const { ok, data } = await api.post('/update-profile', { password: pw });
+      if (ok) { showMsg('pwSuccessMsg', 'Password updated!', 'success'); document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = ''; }
+      else showMsg('pwErrorMsg', data.error || 'Failed to update password', 'error');
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await api.post('/logout');
+      Auth.clearUser();
+      window.location.href = '/frontend/index.html';
+    });
+
+    loadProfile();
+  </script>
+</body>
+
+</html>

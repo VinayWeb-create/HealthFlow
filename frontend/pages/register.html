@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links"></ul>
+    <div class="nav-actions"></div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="glass auth-card animate-in" style="max-width:520px">
+      <div class="auth-logo">
+        <div
+          style="width:56px;height:56px;background:linear-gradient(135deg,var(--teal-400),var(--lime-400));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 12px">
+          💚</div>
+      </div>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-sub">Start your free health journey today</p>
+
+      <div class="form-error" id="errorMsg"></div>
+      <div class="form-success" id="successMsg"></div>
+
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" id="name" placeholder="Jane Doe" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="password" placeholder="Min. 6 characters"
+          autocomplete="new-password">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Age</label>
+          <input type="number" class="form-input" id="age" placeholder="25" min="10" max="120">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Gender</label>
+          <select class="form-input" id="gender">
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Height (cm)</label>
+          <input type="number" class="form-input" id="height" placeholder="170" min="100" max="250">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weight (kg)</label>
+          <input type="number" class="form-input" id="weight" placeholder="70" min="30" max="300" step="0.1">
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-full mt-2" id="registerBtn" style="height:46px">
+        <span id="btnText">Create Account — It's Free</span>
+        <span class="loader hidden" id="btnLoader"></span>
+      </button>
+
+      <div class="auth-link mt-2">
+        Already have an account? <a href="/frontend/pages/login.html">Log in</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    if (Auth.isLoggedIn()) window.location.href = '/frontend/pages/dashboard.html';
+
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.add('show');
+      successMsg.classList.remove('show');
+    }
+    function showSuccess(msg) {
+      successMsg.textContent = msg;
+      successMsg.classList.add('show');
+      errorMsg.classList.remove('show');
+    }
+    function setLoading(on) {
+      document.getElementById('btnText').classList.toggle('hidden', on);
+      document.getElementById('btnLoader').classList.toggle('hidden', !on);
+      document.getElementById('registerBtn').disabled = on;
+    }
+
+    async function doRegister() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const height = document.getElementById('height').value;
+      const weight = document.getElementById('weight').value;
+
+      errorMsg.classList.remove('show');
+      if (!name || !email || !password) return showError('Name, email, and password are required.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email.');
+      if (password.length < 6) return showError('Password must be at least 6 characters.');
+
+      setLoading(true);
+      const { ok, data } = await api.post('/signup', { name, email, password, age: +age, gender, height: +height, weight: +weight });
+      setLoading(false);
+
+      if (ok) {
+        Auth.setUser(data.user, data.token);
+        showSuccess('Account created! Redirecting to dashboard...');
+        setTimeout(() => window.location.href = '/frontend/pages/dashboard.html', 1000);
+      } else {
+        showError(data.error || 'Registration failed. Please try again.');
+      }
+    }
+
+    document.getElementById('registerBtn').addEventListener('click', doRegister);
+  </script>
+</body>
+
+</html>

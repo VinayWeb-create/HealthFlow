@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMI Calculator — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+      <li><a href="/frontend/pages/insights.html">Insights</a></li>
+      <li><a href="/frontend/pages/history.html">History</a></li>
+      <li><a href="/frontend/pages/bmi.html" class="active">BMI</a></li>
+    </ul>
+    <div class="nav-actions"></div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <li><a href="/frontend/pages/dashboard.html"><span class="icon">🏠</span> Dashboard</a></li>
+        <li><a href="/frontend/pages/insights.html"><span class="icon">🧠</span> Insights</a></li>
+        <li><a href="/frontend/pages/history.html"><span class="icon">📋</span> History</a></li>
+        <li><a href="/frontend/pages/bmi.html" class="active"><span class="icon">📊</span> BMI Calculator</a></li>
+        <div class="sidebar-section-label">Account</div>
+        <li><a href="/frontend/pages/profile.html"><span class="icon">👤</span> Profile</a></li>
+        <li><a href="/frontend/pages/premium.html"><span class="icon">⭐</span> Premium</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <h1 class="page-title">📊 BMI Calculator</h1>
+        <p class="page-subtitle">Calculate your Body Mass Index and track changes over time</p>
+      </div>
+
+      <div class="bmi-layout">
+        <!-- Calculator -->
+        <div class="section-card glass animate-in">
+          <div class="card-title">Calculate BMI</div>
+          <div class="form-group">
+            <label class="form-label">Height (cm)</label>
+            <input type="number" class="form-input" id="heightInput" placeholder="170" min="100" max="250">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Weight (kg)</label>
+            <input type="number" class="form-input" id="weightInput" placeholder="70" min="30" max="300" step="0.1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Age (optional)</label>
+            <input type="number" class="form-input" id="ageInput" placeholder="25" min="10" max="120">
+          </div>
+
+          <button class="btn btn-primary w-full" id="calcBtn" style="height:44px;margin-top:8px">
+            Calculate BMI
+          </button>
+
+          <!-- Result -->
+          <div id="bmiResult" class="hidden"
+            style="margin-top:24px;padding-top:24px;border-top:1px solid var(--glass-border)">
+            <div class="bmi-result-display">
+              <div
+                style="font-size:0.82rem;color:rgba(200,242,247,0.5);font-weight:600;text-transform:uppercase;letter-spacing:1px">
+                Your BMI</div>
+              <div class="bmi-number" id="bmiValue">—</div>
+              <div class="bmi-category" id="bmiCategory"></div>
+            </div>
+            <div class="bmi-scale">
+              <div class="bmi-scale-seg underweight"></div>
+              <div class="bmi-scale-seg normal"></div>
+              <div class="bmi-scale-seg overweight"></div>
+              <div class="bmi-scale-seg obese"></div>
+            </div>
+            <div class="bmi-scale-labels">
+              <span>Underweight<br>&lt;18.5</span>
+              <span>Normal<br>18.5–24.9</span>
+              <span>Overweight<br>25–29.9</span>
+              <span>Obese<br>≥30</span>
+            </div>
+            <div id="bmiTip"
+              style="margin-top:20px;padding:16px;background:rgba(255,255,255,0.04);border-radius:12px;font-size:0.88rem;line-height:1.6;color:rgba(200,242,247,0.7)">
+            </div>
+            <button class="btn btn-ghost w-full hidden" id="saveBmiBtn"
+              style="height:40px;margin-top:14px;font-size:0.88rem">
+              💾 Save to History
+            </button>
+          </div>
+        </div>
+
+        <!-- Info + History -->
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <!-- BMI Info -->
+          <div class="section-card glass animate-in delay-1">
+            <div class="card-title">ℹ️ BMI Ranges</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem">
+                <div style="width:14px;height:14px;border-radius:3px;background:var(--teal-400);flex-shrink:0"></div>
+                <span><strong>Underweight</strong> — Less than 18.5</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem">
+                <div style="width:14px;height:14px;border-radius:3px;background:var(--lime-400);flex-shrink:0"></div>
+                <span><strong>Normal weight</strong> — 18.5 to 24.9</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem">
+                <div style="width:14px;height:14px;border-radius:3px;background:var(--amber-400);flex-shrink:0"></div>
+                <span><strong>Overweight</strong> — 25.0 to 29.9</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;font-size:0.88rem">
+                <div style="width:14px;height:14px;border-radius:3px;background:var(--coral-400);flex-shrink:0"></div>
+                <span><strong>Obese</strong> — 30.0 or higher</span>
+              </div>
+            </div>
+            <p style="margin-top:16px;font-size:0.8rem;color:rgba(200,242,247,0.4);line-height:1.6">
+              BMI is a screening tool, not a diagnostic measure. Consult a healthcare provider for personalized advice.
+            </p>
+          </div>
+
+          <!-- History -->
+          <div class="section-card glass animate-in delay-2">
+            <div class="card-title">📅 BMI History</div>
+            <div class="bmi-history-list" id="bmiHistory">
+              <div class="text-muted" style="font-size:0.85rem">
+                <span id="historyMsg">Log in to see your BMI history</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    // Pre-fill from profile if logged in
+    const user = Auth.getUser();
+
+    const bmiTips = {
+      Underweight: '💡 Your BMI suggests you may be underweight. Consider consulting a nutritionist to develop a healthy weight gain plan with nutrient-rich foods.',
+      'Normal weight': '✅ Great job! Your BMI is in the healthy range. Maintain your current lifestyle with balanced nutrition and regular exercise.',
+      Overweight: '💡 Your BMI indicates you may be overweight. Small changes like 30 min daily walks and mindful eating can make a significant difference.',
+      Obese: '⚠️ Your BMI suggests obesity, which may carry health risks. Consider speaking with your doctor about a personalized plan for healthy weight management.',
+    };
+
+    document.getElementById('calcBtn').addEventListener('click', async () => {
+      const h = +document.getElementById('heightInput').value;
+      const w = +document.getElementById('weightInput').value;
+      if (!h || !w || h < 100 || h > 250 || w < 30 || w > 300) {
+        showToast('Please enter valid height (100–250 cm) and weight (30–300 kg)', 'error');
+        return;
+      }
+      const bmi = calcBMI(w, h);
+      const cat = getBMICategory(bmi);
+
+      document.getElementById('bmiValue').textContent = bmi;
+      document.getElementById('bmiValue').style.color = cat.color;
+      const catEl = document.getElementById('bmiCategory');
+      catEl.textContent = cat.label;
+      catEl.style.color = cat.color;
+      catEl.style.background = cat.bg;
+      catEl.style.border = `1px solid ${cat.color}30`;
+      document.getElementById('bmiTip').textContent = bmiTips[cat.label] || '';
+      document.getElementById('bmiResult').classList.remove('hidden');
+
+      if (Auth.isLoggedIn()) {
+        document.getElementById('saveBmiBtn').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('saveBmiBtn')?.addEventListener('click', async () => {
+      const bmi = +document.getElementById('bmiValue').textContent;
+      const height = +document.getElementById('heightInput').value;
+      const weight = +document.getElementById('weightInput').value;
+      const { ok, data } = await api.post('/save-bmi', { bmi, height, weight });
+      if (ok) {
+        showToast('BMI saved to history! 📊', 'success');
+        loadHistory();
+      } else {
+        showToast(data.error || 'Failed to save', 'error');
+      }
+    });
+
+    async function loadHistory() {
+      if (!Auth.isLoggedIn()) return;
+      document.getElementById('historyMsg')?.remove();
+      const { ok, data } = await api.get('/get-health');
+      if (ok && data.logs) {
+        const logsWithBmi = data.logs.filter(l => l.bmi);
+        const container = document.getElementById('bmiHistory');
+        if (!logsWithBmi.length) {
+          container.innerHTML = '<div class="text-muted" style="font-size:0.85rem">No BMI history yet. Calculate and save above!</div>';
+          return;
+        }
+        container.innerHTML = logsWithBmi.slice(0, 6).map(log => {
+          const cat = getBMICategory(log.bmi);
+          return `<div class="bmi-history-item">
+          <span style="color:rgba(200,242,247,0.5)">${fmt.date(log.createdAt || log.date)}</span>
+          <strong style="color:${cat.color}">${log.bmi}</strong>
+          <span style="font-size:0.78rem;color:${cat.color}">${cat.label}</span>
+        </div>`;
+        }).join('');
+      }
+    }
+
+    // Pre-fill from user profile
+    if (user) {
+      // Attempt to get fresh user data
+      api.get('/profile').then(({ ok, data }) => {
+        if (ok && data.user) {
+          if (data.user.height) document.getElementById('heightInput').value = data.user.height;
+          if (data.user.weight) document.getElementById('weightInput').value = data.user.weight;
+          if (data.user.age) document.getElementById('ageInput').value = data.user.age;
+        }
+      });
+      loadHistory();
+    }
+  </script>
+</body>
+
+</html>

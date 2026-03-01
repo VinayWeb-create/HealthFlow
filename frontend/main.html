@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthFlow — Track Your Wellness Journey</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+      <li><a href="/frontend/pages/insights.html">Insights</a></li>
+      <li><a href="/frontend/pages/history.html">History</a></li>
+      <li><a href="/frontend/pages/premium.html">Premium</a></li>
+    </ul>
+    <div class="nav-actions"></div>
+    <div class="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text animate-in">
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Your Personal Health OS
+        </div>
+        <h1 class="hero-title">
+          Track Every Step of Your <span class="highlight">Wellness Journey</span>
+        </h1>
+        <p class="hero-sub">
+          HealthFlow gives you a beautiful, intelligent dashboard to monitor water intake, steps, mood, weight, and
+          sleep — all in one place. Built for people who take their health seriously.
+        </p>
+        <div class="hero-cta">
+          <a href="/frontend/pages/register.html" class="btn btn-primary btn-lg">
+            Start Free Today →
+          </a>
+          <a href="#features" class="btn btn-ghost btn-lg">See Features</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">10K+</div>
+            <div class="hero-stat-label">Active Users</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">4.9★</div>
+            <div class="hero-stat-label">User Rating</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">Data Security</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="hero-visual">
+        <div class="float-card">
+          <div class="float-card-val">🔥 8,432</div>
+          <div class="float-card-label">Steps today</div>
+        </div>
+        <div class="hero-card-main glass animate-in delay-2">
+          <div class="hero-card-label">Today's Health Score</div>
+          <div class="hero-score">82</div>
+          <div class="hero-score-sub">Great job! Keep it up 💪</div>
+          <div class="hero-metrics">
+            <div class="hero-metric">
+              <div class="hero-metric-icon">💧</div>
+              <div class="hero-metric-val">6/8</div>
+              <div class="hero-metric-name">Glasses</div>
+            </div>
+            <div class="hero-metric">
+              <div class="hero-metric-icon">😊</div>
+              <div class="hero-metric-val">Good</div>
+              <div class="hero-metric-name">Mood</div>
+            </div>
+            <div class="hero-metric">
+              <div class="hero-metric-icon">⚖️</div>
+              <div class="hero-metric-val">72 kg</div>
+              <div class="hero-metric-name">Weight</div>
+            </div>
+            <div class="hero-metric">
+              <div class="hero-metric-icon">😴</div>
+              <div class="hero-metric-val">7.5h</div>
+              <div class="hero-metric-name">Sleep</div>
+            </div>
+          </div>
+        </div>
+        <div class="float-card" style="bottom:20px;left:-30px;animation-delay:2s">
+          <div class="float-card-val" style="color:var(--lime-300)">BMI 22.4</div>
+          <div class="float-card-label">Normal range</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <span class="section-tag">Why HealthFlow</span>
+      <h2 class="section-title">Everything you need to stay <br><span style="color:var(--teal-300)">healthy &
+          accountable</span></h2>
+      <p class="section-sub">One dashboard, total wellness visibility. Track what matters, discover patterns, and build
+        lasting habits.</p>
+      <div class="features-grid">
+        <div class="feature-card glass animate-in delay-1">
+          <div class="feature-icon teal">💧</div>
+          <div class="feature-title">Hydration Tracker</div>
+          <div class="feature-desc">Visual cup tracker to hit your 8 glasses daily goal. Quick-tap logging makes it
+            effortless to stay hydrated all day.</div>
+        </div>
+        <div class="feature-card glass animate-in delay-2">
+          <div class="feature-icon lime">👟</div>
+          <div class="feature-title">Steps & Activity</div>
+          <div class="feature-desc">Log your daily steps and see beautiful weekly bar charts showing your activity
+            trends over time.</div>
+        </div>
+        <div class="feature-card glass animate-in delay-3">
+          <div class="feature-icon coral">😊</div>
+          <div class="feature-title">Mood Journaling</div>
+          <div class="feature-desc">Track your emotional wellbeing daily with emoji-based mood selection. Spot
+            correlations between mood and other health metrics.</div>
+        </div>
+        <div class="feature-card glass animate-in delay-1">
+          <div class="feature-icon purple">⚖️</div>
+          <div class="feature-title">Weight Tracking</div>
+          <div class="feature-desc">Log your weight daily and watch your progress unfold with clean visualizations and
+            trend indicators.</div>
+        </div>
+        <div class="feature-card glass animate-in delay-2">
+          <div class="feature-icon amber">📊</div>
+          <div class="feature-title">BMI Calculator</div>
+          <div class="feature-desc">Instant BMI calculation with category classification, health tips, and history
+            tracking to monitor your journey.</div>
+        </div>
+        <div class="feature-card glass animate-in delay-3">
+          <div class="feature-icon teal">🏆</div>
+          <div class="feature-title">Health Score</div>
+          <div class="feature-desc">A composite daily health score (0–100) combining all your metrics, giving you a
+            single number to strive towards.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="glass"
+        style="padding:4rem;text-align:center;background:rgba(43,163,181,0.06);border-color:rgba(43,163,181,0.2)">
+        <h2 class="section-title" style="margin-bottom:1rem">Ready to take control of your health?</h2>
+        <p class="section-sub" style="margin:0 auto 2.5rem;text-align:center">Join thousands of people building better
+          health habits every day with HealthFlow.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+          <a href="/frontend/pages/register.html" class="btn btn-lime btn-lg">Create Free Account</a>
+          <a href="/frontend/pages/login.html" class="btn btn-ghost btn-lg">Already have an account?</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer
+    style="border-top:1px solid var(--glass-border);padding:2rem;text-align:center;color:rgba(200,242,247,0.35);font-size:0.85rem;position:relative;z-index:1">
+    © 2024 HealthFlow · Built with Flask & MongoDB ·
+    <a href="/frontend/pages/premium.html" style="color:var(--teal-400);text-decoration:none">Go Premium</a>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>

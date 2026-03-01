@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links"></ul>
+    <div class="nav-actions"></div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="glass auth-card animate-in">
+      <div class="auth-logo">
+        <div
+          style="width:56px;height:56px;background:linear-gradient(135deg,var(--teal-400),var(--lime-400));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 12px">
+          💚</div>
+        <div class="nav-logo-text"
+          style="font-size:1.6rem;-webkit-text-fill-color:unset;background:none;color:inherit;display:block;text-align:center;font-family:var(--font-display);font-weight:800;background:linear-gradient(135deg,var(--teal-300),var(--lime-300));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+          HealthFlow</div>
+      </div>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-sub">Log in to continue your health journey</p>
+
+      <div class="form-error" id="errorMsg"></div>
+      <div class="form-success" id="successMsg"></div>
+
+      <div class="form-group">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-input" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="password" placeholder="Your password"
+          autocomplete="current-password">
+      </div>
+
+      <button class="btn btn-primary w-full mt-2" id="loginBtn" style="height:46px">
+        <span id="btnText">Log In</span>
+        <span class="loader hidden" id="btnLoader"></span>
+      </button>
+
+      <div class="auth-link mt-2">
+        Don't have an account? <a href="/frontend/pages/register.html">Sign up free</a>
+      </div>
+      <div class="auth-link" style="margin-top:10px;font-size:0.8rem">
+        <a href="/frontend/index.html" style="color:rgba(200,242,247,0.4)">← Back to home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    // Redirect if already logged in
+    if (Auth.isLoggedIn()) window.location.href = '/frontend/pages/dashboard.html';
+
+    const loginBtn = document.getElementById('loginBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.add('show');
+      successMsg.classList.remove('show');
+    }
+    function showSuccess(msg) {
+      successMsg.textContent = msg;
+      successMsg.classList.add('show');
+      errorMsg.classList.remove('show');
+    }
+    function setLoading(on) {
+      document.getElementById('btnText').classList.toggle('hidden', on);
+      document.getElementById('btnLoader').classList.toggle('hidden', !on);
+      loginBtn.disabled = on;
+    }
+
+    async function doLogin() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      errorMsg.classList.remove('show');
+
+      if (!email || !password) return showError('Please fill in all fields.');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email.');
+
+      setLoading(true);
+      const { ok, data } = await api.post('/login', { email, password });
+      setLoading(false);
+
+      if (ok) {
+        Auth.setUser(data.user, data.token);
+        showSuccess('Login successful! Redirecting...');
+        setTimeout(() => window.location.href = '/frontend/pages/dashboard.html', 900);
+      } else {
+        showError(data.error || 'Login failed. Please try again.');
+      }
+    }
+
+    loginBtn.addEventListener('click', doLogin);
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  </script>
+</body>
+
+</html>

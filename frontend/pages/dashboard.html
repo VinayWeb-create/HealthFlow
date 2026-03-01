@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — HealthFlow</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="/frontend/index.html" class="nav-logo">
+      <div class="nav-logo-icon">💚</div>
+      <span class="nav-logo-text">HealthFlow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/frontend/pages/dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="/frontend/pages/insights.html">Insights</a></li>
+      <li><a href="/frontend/pages/history.html">History</a></li>
+      <li><a href="/frontend/pages/profile.html">Profile</a></li>
+    </ul>
+    <div class="nav-actions"></div>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+
+  <div class="dashboard-layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <ul class="sidebar-nav">
+        <div class="sidebar-section-label">Main</div>
+        <li><a href="/frontend/pages/dashboard.html" class="active"><span class="icon">🏠</span> Dashboard</a></li>
+        <li><a href="/frontend/pages/insights.html"><span class="icon">🧠</span> Insights</a></li>
+        <li><a href="/frontend/pages/history.html"><span class="icon">📋</span> History</a></li>
+        <li><a href="/frontend/pages/bmi.html"><span class="icon">📊</span> BMI Calculator</a></li>
+        <div class="sidebar-section-label">Account</div>
+        <li><a href="/frontend/pages/profile.html"><span class="icon">👤</span> Profile</a></li>
+        <li><a href="/frontend/pages/premium.html"><span class="icon">⭐</span> Premium</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+      <div class="page-header"
+        style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+        <div>
+          <h1 class="page-title" id="welcomeMsg">Welcome back 👋</h1>
+          <p class="page-subtitle" id="todayDate">Loading...</p>
+        </div>
+        <div id="streakContainer"></div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="dash-grid">
+        <div class="dash-card glass water animate-in delay-1">
+          <div class="dash-card-icon">💧</div>
+          <div class="dash-card-label">Water</div>
+          <div class="dash-card-val" id="waterDisplay">0</div>
+          <div class="dash-card-unit">/ 8 glasses</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="waterProgress" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="dash-card glass steps animate-in delay-2">
+          <div class="dash-card-icon">👟</div>
+          <div class="dash-card-label">Steps</div>
+          <div class="dash-card-val" id="stepsDisplay">0</div>
+          <div class="dash-card-unit">/ 10,000 goal</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="stepsProgress" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="dash-card glass mood animate-in delay-3">
+          <div class="dash-card-icon">😊</div>
+          <div class="dash-card-label">Mood</div>
+          <div class="dash-card-val" id="moodDisplay">—</div>
+          <div class="dash-card-unit">today's feeling</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="moodProgress" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="dash-card glass weight animate-in delay-4">
+          <div class="dash-card-icon">⚖️</div>
+          <div class="dash-card-label">Weight</div>
+          <div class="dash-card-val" id="weightDisplay">—</div>
+          <div class="dash-card-unit">kilograms</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="weightProgress" style="width:80%"></div>
+          </div>
+        </div>
+        <div class="dash-card glass sleep animate-in delay-4">
+          <div class="dash-card-icon">😴</div>
+          <div class="dash-card-label">Sleep</div>
+          <div class="dash-card-val" id="sleepDisplay">—</div>
+          <div class="dash-card-unit">hours</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="sleepProgress" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 2 -->
+      <div class="dash-row2">
+        <!-- LOG FORM -->
+        <div class="section-card glass animate-in delay-2">
+          <div class="card-title">
+            📝 Log Today's Health
+            <span id="saveStatus" style="font-size:0.8rem;font-weight:400;color:var(--teal-300)"></span>
+          </div>
+
+          <!-- Water cups -->
+          <div style="margin-bottom:18px">
+            <div class="log-label" style="margin-bottom:8px">💧 Water Intake (tap cups)</div>
+            <div class="water-visual" id="waterCups"></div>
+            <input type="hidden" id="waterInput" value="0">
+          </div>
+
+          <!-- Mood -->
+          <div style="margin-bottom:18px">
+            <div class="log-label" style="margin-bottom:8px">😊 Mood (1-5)</div>
+            <div class="mood-selector" id="moodSelector">
+              <button class="mood-btn" data-mood="1" title="Very Bad">😣</button>
+              <button class="mood-btn" data-mood="2" title="Bad">😕</button>
+              <button class="mood-btn" data-mood="3" title="Neutral">😐</button>
+              <button class="mood-btn" data-mood="4" title="Good">😊</button>
+              <button class="mood-btn" data-mood="5" title="Great">😄</button>
+            </div>
+            <input type="hidden" id="moodInput" value="">
+          </div>
+
+          <div class="log-row">
+            <div class="log-input-group">
+              <label class="log-label">👟 Steps</label>
+              <input type="number" class="log-input" id="stepsInput" placeholder="8000" min="0">
+            </div>
+            <div class="log-input-group">
+              <label class="log-label">⚖️ Weight (kg)</label>
+              <input type="number" class="log-input" id="weightInput" placeholder="70" min="30" max="300" step="0.1">
+            </div>
+            <div class="log-input-group">
+              <label class="log-label">😴 Sleep (hrs)</label>
+              <input type="number" class="log-input" id="sleepInput" placeholder="8" min="0" max="24" step="0.5">
+            </div>
+            <div class="log-input-group">
+              <label class="log-label">📅 Date</label>
+              <input type="date" class="log-input" id="dateInput">
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-full mt-2" id="saveHealthBtn" style="height:44px;margin-top:18px">
+            <span id="saveBtnText">💾 Save Today's Log</span>
+            <span class="loader hidden" id="saveBtnLoader"></span>
+          </button>
+        </div>
+
+        <!-- HEALTH SCORE -->
+        <div class="section-card glass animate-in delay-3">
+          <div class="card-title">🏆 Health Score</div>
+          <div class="health-score-display">
+            <div class="score-ring">
+              <svg viewBox="0 0 120 120" width="120" height="120">
+                <defs>
+                  <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:var(--teal-400)" />
+                    <stop offset="100%" style="stop-color:var(--lime-400)" />
+                  </linearGradient>
+                </defs>
+                <circle class="bg" cx="60" cy="60" r="52" />
+                <circle class="fill" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"
+                  id="scoreCircle" />
+              </svg>
+              <div class="score-number" id="scoreNumber">0</div>
+            </div>
+            <div class="score-label">out of 100</div>
+            <div class="score-grade" id="scoreGrade">Log data to get score</div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.85rem">
+              <span style="color:rgba(200,242,247,0.5)">💧 Hydration</span>
+              <span id="hydrationScore" style="color:var(--teal-300);font-weight:600">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.85rem">
+              <span style="color:rgba(200,242,247,0.5)">👟 Activity</span>
+              <span id="activityScore" style="color:var(--lime-300);font-weight:600">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.85rem">
+              <span style="color:rgba(200,242,247,0.5)">😴 Sleep</span>
+              <span id="sleepScore" style="color:var(--purple-400);font-weight:600">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.85rem">
+              <span style="color:rgba(200,242,247,0.5)">😊 Mood</span>
+              <span id="moodScore" style="color:var(--coral-400);font-weight:600">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ROW 3 -->
+      <div class="dash-row3">
+        <!-- WEEKLY CHART -->
+        <div class="section-card glass animate-in delay-2">
+          <div class="card-title">📈 Weekly Steps Overview</div>
+          <div class="weekly-chart" id="weeklyChart">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="section-card glass animate-in delay-3">
+          <div class="card-title">⚡ Quick Actions</div>
+          <div class="quick-actions">
+            <a href="/frontend/pages/bmi.html" class="quick-action">
+              <span class="quick-action-icon">📊</span> BMI Calculator
+            </a>
+            <a href="/frontend/pages/profile.html" class="quick-action">
+              <span class="quick-action-icon">👤</span> Edit Profile
+            </a>
+            <a href="/frontend/pages/premium.html" class="quick-action">
+              <span class="quick-action-icon">⭐</span> Go Premium
+            </a>
+            <div class="quick-action" id="logTodayQuick" style="cursor:pointer">
+              <span class="quick-action-icon">📝</span> Today's Log
+            </div>
+          </div>
+
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--glass-border)">
+            <div class="card-title" style="margin-bottom:14px">📋 Recent Logs</div>
+            <div id="recentLogs" style="display:flex;flex-direction:column;gap:8px">
+              <div class="text-muted" style="font-size:0.85rem">No logs yet. Start tracking!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/app.js"></script>
+  <script>
+    if (!Auth.requireAuth()) throw new Error('Not authenticated');
+
+    const user = Auth.getUser();
+    let currentMood = null;
+    let todayData = {};
+
+    // Init
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('dateInput').valueAsDate = new Date();
+    renderWaterCups(0);
+
+    // Welcome message
+    async function loadUser() {
+      const ok = await Auth.checkSession();
+      if (ok) {
+        const user = Auth.getUser();
+        const name = user.name?.split(' ')[0] || 'there';
+        const hour = new Date().getHours();
+        const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+        document.getElementById('welcomeMsg').textContent = `${greeting}, ${name} 👋`;
+      }
+    }
+
+    // Load today's health data
+    async function loadTodayHealth() {
+      const { ok, data } = await api.get('/get-today-health');
+      if (ok && data.log) {
+        todayData = data.log;
+        populateForm(data.log);
+        updateStats(data.log);
+        updateScore(data.log);
+      }
+    }
+
+    // Load weekly data
+    async function loadWeeklyHealth() {
+      const { ok, data } = await api.get('/get-weekly-health');
+      if (ok) {
+        renderWeeklyChart(data.logs || []);
+        renderRecentLogs(data.logs || []);
+      }
+    }
+
+    function populateForm(log) {
+      if (log.water != null) { document.getElementById('waterInput').value = log.water; renderWaterCups(log.water); }
+      if (log.steps != null) document.getElementById('stepsInput').value = log.steps;
+      if (log.weight != null) document.getElementById('weightInput').value = log.weight;
+      if (log.sleep != null) document.getElementById('sleepInput').value = log.sleep;
+      if (log.mood) {
+        currentMood = log.mood;
+        document.getElementById('moodInput').value = log.mood;
+        document.querySelectorAll('.mood-btn').forEach(b => {
+          b.classList.toggle('selected', +b.dataset.mood === log.mood);
+        });
+      }
+      if (log.date) document.getElementById('dateInput').value = log.date.split('T')[0];
+    }
+
+    function updateStats(log) {
+      const water = log.water || 0;
+      const steps = log.steps || 0;
+      const moodLabels = { 1: '😣 Very Bad', 2: '😕 Bad', 3: '😐 Okay', 4: '😊 Good', 5: '😄 Great' };
+
+      document.getElementById('waterDisplay').textContent = water;
+      document.getElementById('waterProgress').style.width = Math.min(water / 8 * 100, 100) + '%';
+      document.getElementById('stepsDisplay').textContent = steps.toLocaleString();
+      document.getElementById('stepsProgress').style.width = Math.min(steps / 10000 * 100, 100) + '%';
+      document.getElementById('moodDisplay').textContent = log.mood ? moodLabels[log.mood] : '—';
+      document.getElementById('moodProgress').style.width = log.mood ? (log.mood / 5 * 100) + '%' : '0%';
+      document.getElementById('weightDisplay').textContent = log.weight ? log.weight + ' kg' : '—';
+      document.getElementById('sleepDisplay').textContent = log.sleep ? log.sleep + 'h' : '—';
+      document.getElementById('sleepProgress').style.width = log.sleep ? Math.min(log.sleep / 9 * 100, 100) + '%' : '0%';
+    }
+
+    function updateScore(log) {
+      const score = calcHealthScore(log);
+      const grade = getScoreGrade(score);
+      const circumference = 2 * Math.PI * 52;
+      const offset = circumference - (score / 100) * circumference;
+      document.getElementById('scoreCircle').style.strokeDashoffset = offset;
+      document.getElementById('scoreNumber').textContent = score;
+      document.getElementById('scoreGrade').textContent = grade.label;
+      document.getElementById('scoreGrade').style.color = grade.color;
+      document.getElementById('hydrationScore').textContent = log.water ? `${Math.min(Math.round(log.water / 8 * 100), 100)}%` : '—';
+      document.getElementById('activityScore').textContent = log.steps ? `${Math.min(Math.round(log.steps / 10000 * 100), 100)}%` : '—';
+      document.getElementById('sleepScore').textContent = log.sleep ? `${log.sleep}h` : '—';
+      document.getElementById('moodScore').textContent = log.mood ? `${log.mood}/5` : '—';
+    }
+
+    function renderRecentLogs(logs) {
+      const container = document.getElementById('recentLogs');
+      if (!logs.length) return;
+      container.innerHTML = logs.slice(0, 4).map(log => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:0.82rem">
+        <span style="color:rgba(200,242,247,0.55)">${new Date(log.date || log.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+        <span>💧${log.water || 0} &nbsp; 👟${(log.steps || 0).toLocaleString()}</span>
+        <span style="color:var(--lime-300)">${calcHealthScore(log)} pts</span>
+      </div>`).join('');
+    }
+
+    // Mood selector
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentMood = +btn.dataset.mood;
+        document.getElementById('moodInput').value = currentMood;
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      });
+    });
+
+    // Save health log
+    document.getElementById('saveHealthBtn').addEventListener('click', async () => {
+      const payload = {
+        water: +document.getElementById('waterInput').value || 0,
+        steps: +document.getElementById('stepsInput').value || 0,
+        weight: +document.getElementById('weightInput').value || null,
+        sleep: +document.getElementById('sleepInput').value || null,
+        mood: currentMood,
+        date: document.getElementById('dateInput').value,
+      };
+      if (!payload.water && !payload.steps && !payload.mood && !payload.weight && !payload.sleep) {
+        showToast('Please enter at least one metric', 'error');
+        return;
+      }
+      document.getElementById('saveBtnText').classList.add('hidden');
+      document.getElementById('saveBtnLoader').classList.remove('hidden');
+      document.getElementById('saveHealthBtn').disabled = true;
+
+      const { ok, data } = await api.post('/save-health', payload);
+
+      document.getElementById('saveBtnText').classList.remove('hidden');
+      document.getElementById('saveBtnLoader').classList.add('hidden');
+      document.getElementById('saveHealthBtn').disabled = false;
+
+      if (ok) {
+        showToast('Health log saved! 🎉', 'success');
+        document.getElementById('saveStatus').textContent = '✓ Saved just now';
+        todayData = { ...todayData, ...payload };
+        updateStats(todayData);
+        updateScore(todayData);
+        loadWeeklyHealth();
+      } else {
+        showToast(data.error || 'Failed to save. Try again.', 'error');
+      }
+    });
+
+    document.getElementById('logTodayQuick').addEventListener('click', () => {
+      document.getElementById('waterCups').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    // Load streak
+    async function loadStreak() {
+      const { ok, data } = await api.get('/get-insights');
+      if (ok && data.streak > 0) {
+        document.getElementById('streakContainer').innerHTML = `
+        <div class="streak-badge">
+          <span class="streak-fire">🔥</span> ${data.streak}-day streak!
+        </div>`;
+      }
+    }
+
+    // Boot
+    (async () => {
+      await loadUser();
+      await loadTodayHealth();
+      await loadWeeklyHealth();
+      loadStreak();
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health History — HealthFlow</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/frontend/main.html" class="nav-logo">
+            <div class="nav-logo-icon">💚</div>
+            <span class="nav-logo-text">HealthFlow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/frontend/pages/dashboard.html">Dashboard</a></li>
+            <li><a href="/frontend/pages/insights.html">Insights</a></li>
+            <li><a href="/frontend/pages/history.html" class="active">History</a></li>
+            <li><a href="/frontend/pages/profile.html">Profile</a></li>
+        </ul>
+        <div class="nav-actions"></div>
+        <div class="hamburger"><span></span><span></span><span></span></div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <ul class="sidebar-nav">
+                <div class="sidebar-section-label">Main</div>
+                <li><a href="/frontend/pages/dashboard.html"><span class="icon">🏠</span> Dashboard</a></li>
+                <li><a href="/frontend/pages/insights.html"><span class="icon">🧠</span> Insights</a></li>
+                <li><a href="/frontend/pages/history.html" class="active"><span class="icon">📋</span> History</a></li>
+                <li><a href="/frontend/pages/bmi.html"><span class="icon">📊</span> BMI Calculator</a></li>
+                <div class="sidebar-section-label">Account</div>
+                <li><a href="/frontend/pages/profile.html"><span class="icon">👤</span> Profile</a></li>
+                <li><a href="/frontend/pages/premium.html"><span class="icon">⭐</span> Premium</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">📋 Health History</h1>
+                <p class="page-subtitle">View, filter, and export your complete health log</p>
+            </div>
+
+            <div class="section-card glass animate-in">
+                <!-- Controls -->
+                <div class="history-controls">
+                    <div class="history-filters">
+                        <button class="filter-btn active" data-days="7">Last 7 days</button>
+                        <button class="filter-btn" data-days="30">Last 30 days</button>
+                        <button class="filter-btn" data-days="90">Last 90 days</button>
+                        <button class="filter-btn" data-days="0">All Time</button>
+                    </div>
+                    <div class="history-actions">
+                        <button class="btn btn-ghost btn-sm" id="exportBtn">📥 Export CSV</button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-scroll">
+                    <table class="health-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>💧 Water</th>
+                                <th>👟 Steps</th>
+                                <th>😊 Mood</th>
+                                <th>⚖️ Weight</th>
+                                <th>😴 Sleep</th>
+                                <th>🏆 Score</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody">
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-state-icon">📋</div>
+                                        <div class="empty-state-title">Loading your logs...</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary -->
+                <div id="historySummary"
+                    style="margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border);display:flex;justify-content:space-between;align-items:center;font-size:0.82rem;color:rgba(200,242,247,0.45)">
+                    <span id="logCount">— logs</span>
+                    <span id="dateRange">—</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script>
+        if (!Auth.requireAuth()) throw new Error('Not authenticated');
+
+        const moodEmojis = { 1: '😣', 2: '😕', 3: '😐', 4: '😊', 5: '😄' };
+        let allLogs = [];
+        let currentDays = 7;
+
+        async function loadHistory(limit = 90) {
+            const { ok, data } = await api.get(`/get-health?limit=${limit}`);
+            if (!ok) { showToast('Failed to load history', 'error'); return; }
+            allLogs = data.logs || [];
+            filterAndRender(currentDays);
+        }
+
+        function filterAndRender(days) {
+            currentDays = days;
+            let filtered = allLogs;
+            if (days > 0) {
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - days);
+                filtered = allLogs.filter(l => l.date && new Date(l.date) >= cutoff);
+            }
+            renderTable(filtered);
+
+            // Update active filter
+            document.querySelectorAll('.filter-btn').forEach(b =>
+                b.classList.toggle('active', +b.dataset.days === days)
+            );
+        }
+
+        function renderTable(logs) {
+            const body = document.getElementById('historyBody');
+
+            if (!logs.length) {
+                body.innerHTML = `<tr><td colspan="8">
+        <div class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">No logs found</div>
+          <div class="empty-state-desc">Try a different time range or start logging on the Dashboard.</div>
+        </div>
+      </td></tr>`;
+                document.getElementById('logCount').textContent = '0 logs';
+                document.getElementById('dateRange').textContent = '—';
+                return;
+            }
+
+            body.innerHTML = logs.map(log => {
+                const dateStr = log.date ? new Date(log.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : '—';
+                const score = calcHealthScore(log);
+                return `
+        <tr data-id="${log._id}">
+          <td>${dateStr}</td>
+          <td>${log.water != null ? log.water + ' / 8' : '—'}</td>
+          <td>${log.steps != null ? log.steps.toLocaleString() : '—'}</td>
+          <td class="mood-cell">${log.mood ? moodEmojis[log.mood] : '—'}</td>
+          <td>${log.weight != null ? log.weight + ' kg' : '—'}</td>
+          <td>${log.sleep != null ? log.sleep + 'h' : '—'}</td>
+          <td class="score-cell">${score}</td>
+          <td><button class="delete-log-btn" onclick="deleteLog('${log._id}')">🗑</button></td>
+        </tr>`;
+            }).join('');
+
+            // Summary
+            document.getElementById('logCount').textContent = `${logs.length} log${logs.length !== 1 ? 's' : ''}`;
+            if (logs.length >= 2) {
+                const first = logs[logs.length - 1].date ? new Date(logs[logs.length - 1].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+                const last = logs[0].date ? new Date(logs[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+                document.getElementById('dateRange').textContent = `${first} — ${last}`;
+            }
+        }
+
+        async function deleteLog(logId) {
+            if (!confirm('Delete this health log? This cannot be undone.')) return;
+            const { ok, data } = await api.request('DELETE', `/delete-health/${logId}`);
+            if (ok) {
+                showToast('Log deleted 🗑', 'success');
+                allLogs = allLogs.filter(l => l._id !== logId);
+                filterAndRender(currentDays);
+            } else {
+                showToast(data.error || 'Failed to delete', 'error');
+            }
+        }
+
+        // Filter button clicks
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => filterAndRender(+btn.dataset.days));
+        });
+
+        // Export CSV
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            window.open(API_BASE + '/export-health', '_blank');
+        });
+
+        // Load all (up to 90)
+        loadHistory(90);
+    </script>
+</body>
+
+</html>
