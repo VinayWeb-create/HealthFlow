@@ -33,9 +33,9 @@ const api = {
         console.warn(`[Auth] 401 Unauthorized at ${endpoint}. Clearing local user & redirecting...`);
         Auth.clearUser();
         // Don't redirect if we're already on an auth page or the home page
-        const isAuthPage = ['login.html', 'register.html', 'index.html', '/frontend/'].some(p => window.location.pathname.endsWith(p) || window.location.pathname === '/' || window.location.pathname === '/frontend/index.html');
+        const isAuthPage = ['login.html', 'register.html', 'index.html', '/'].some(p => window.location.pathname.endsWith(p) || window.location.pathname === '/' || window.location.pathname === '/index.html');
         if (!isAuthPage) {
-          window.location.href = '/frontend/pages/login.html';
+          window.location.href = '/pages/login.html';
         }
       }
 
@@ -76,11 +76,11 @@ const Auth = {
     return hasToken;
   },
   requireAuth() {
-    if (!this.isLoggedIn()) { window.location.href = '/frontend/pages/login.html'; return false; }
+    if (!this.isLoggedIn()) { window.location.href = '/pages/login.html'; return false; }
     return true;
   },
   requireGuest() {
-    if (this.isLoggedIn()) { window.location.href = '/frontend/pages/dashboard.html'; }
+    if (this.isLoggedIn()) { window.location.href = '/pages/dashboard.html'; }
   },
   async checkSession() {
     const { ok, data } = await api.get('/user');
@@ -125,10 +125,10 @@ function initNavbar() {
       <div class="profile-menu">
         <div class="profile-avatar" id="avatarBtn">${initials}</div>
         <div class="dropdown-menu" id="dropdownMenu">
-          <a href="/frontend/pages/dashboard.html">🏠 Dashboard</a>
-          <a href="/frontend/pages/profile.html">👤 Profile</a>
-          <a href="/frontend/pages/bmi.html">📊 BMI Calculator</a>
-          <a href="/frontend/pages/premium.html">⭐ Premium</a>
+          <a href="/pages/dashboard.html">🏠 Dashboard</a>
+          <a href="/pages/profile.html">👤 Profile</a>
+          <a href="/pages/bmi.html">📊 BMI Calculator</a>
+          <a href="/pages/premium.html">⭐ Premium</a>
           <div class="dropdown-divider"></div>
           <a href="#" id="logoutBtn">🚪 Logout</a>
         </div>
@@ -145,12 +145,12 @@ function initNavbar() {
       await api.post('/logout');
       Auth.clearUser();
       showToast('Logged out successfully', 'success', 1500);
-      setTimeout(() => window.location.href = '/frontend/index.html', 1000);
+      setTimeout(() => window.location.href = '/index.html', 1000);
     });
   } else {
     navActions.innerHTML = `
-      <a href="/frontend/pages/login.html" class="btn btn-ghost btn-sm">Login</a>
-      <a href="/frontend/pages/register.html" class="btn btn-primary btn-sm">Get Started</a>`;
+      <a href="/pages/login.html" class="btn btn-ghost btn-sm">Login</a>
+      <a href="/pages/register.html" class="btn btn-primary btn-sm">Get Started</a>`;
   }
 
   // Hamburger

@@ -10,7 +10,7 @@
 
 <body>
   <nav class="navbar">
-    <a href="/frontend/index.html" class="nav-logo">
+    <a href="/index.html" class="nav-logo">
       <div class="nav-logo-icon">💚</div>
       <span class="nav-logo-text">HealthFlow</span>
     </a>
@@ -76,14 +76,14 @@
       </button>
 
       <div class="auth-link mt-2">
-        Already have an account? <a href="/frontend/pages/login.html">Log in</a>
+        Already have an account? <a href="/pages/login.html">Log in</a>
       </div>
     </div>
   </div>
 
   <script src="../js/app.js"></script>
   <script>
-    if (Auth.isLoggedIn()) window.location.href = '/frontend/pages/dashboard.html';
+    if (Auth.isLoggedIn()) window.location.href = '/pages/dashboard.html';
 
     const errorMsg = document.getElementById('errorMsg');
     const successMsg = document.getElementById('successMsg');
@@ -125,7 +125,7 @@
       if (ok) {
         Auth.setUser(data.user, data.token);
         showSuccess('Account created! Redirecting to dashboard...');
-        setTimeout(() => window.location.href = '/frontend/pages/dashboard.html', 1000);
+        setTimeout(() => window.location.href = '/pages/dashboard.html', 1000);
       } else {
         showError(data.error || 'Registration failed. Please try again.');
       }

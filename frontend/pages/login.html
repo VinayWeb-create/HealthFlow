@@ -10,7 +10,7 @@
 
 <body>
   <nav class="navbar">
-    <a href="/frontend/index.html" class="nav-logo">
+    <a href="/index.html" class="nav-logo">
       <div class="nav-logo-icon">💚</div>
       <span class="nav-logo-text">HealthFlow</span>
     </a>
@@ -50,10 +50,10 @@
       </button>
 
       <div class="auth-link mt-2">
-        Don't have an account? <a href="/frontend/pages/register.html">Sign up free</a>
+        Don't have an account? <a href="/pages/register.html">Sign up free</a>
       </div>
       <div class="auth-link" style="margin-top:10px;font-size:0.8rem">
-        <a href="/frontend/index.html" style="color:rgba(200,242,247,0.4)">← Back to home</a>
+        <a href="/index.html" style="color:rgba(200,242,247,0.4)">← Back to home</a>
       </div>
     </div>
   </div>
@@ -61,7 +61,7 @@
   <script src="../js/app.js"></script>
   <script>
     // Redirect if already logged in
-    if (Auth.isLoggedIn()) window.location.href = '/frontend/pages/dashboard.html';
+    if (Auth.isLoggedIn()) window.location.href = '/pages/dashboard.html';
 
     const loginBtn = document.getElementById('loginBtn');
     const errorMsg = document.getElementById('errorMsg');
@@ -98,7 +98,7 @@
       if (ok) {
         Auth.setUser(data.user, data.token);
         showSuccess('Login successful! Redirecting...');
-        setTimeout(() => window.location.href = '/frontend/pages/dashboard.html', 900);
+        setTimeout(() => window.location.href = '/pages/dashboard.html', 900);
       } else {
         showError(data.error || 'Login failed. Please try again.');
       }
