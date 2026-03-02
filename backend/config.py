@@ -8,9 +8,8 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "healthflow")
     MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://Vinay:vinayavala@cluster0.krhrrdn.mongodb.net/?appName=Cluster0")
     DB_NAME = os.environ.get("DB_NAME", "healthflow")
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = "None" # Required for cross-site cookies
-    SESSION_COOKIE_SECURE = True   # Required for SameSite=None
+    SESSION_COOKIE_SAMESITE = "None"
+    SESSION_COOKIE_SECURE = True
     PERMANENT_SESSION_LIFETIME = timedelta(days=30)
     CORS_ORIGINS = os.environ.get(
         "CORS_ORIGINS",
@@ -23,6 +22,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = "None"
 
 config = {
     "development": DevelopmentConfig,

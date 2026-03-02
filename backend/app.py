@@ -25,8 +25,17 @@ def create_app(env: str = None) -> Flask:
     app.config.from_object(config.get(env, config["default"]))
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-    origins = app.config.get("CORS_ORIGINS", [])
-    processed_origins = [re.compile(o[3:]) if o.startswith("re:") else o for o in origins]
+    # Merge env origins with necessary Vercel patterns to prevent overrides
+    env_origins = app.config.get("CORS_ORIGINS", [])
+    processed_origins = []
+    for o in env_origins:
+        if o.startswith("re:"):
+            processed_origins.append(re.compile(o[3:]))
+        else:
+            processed_origins.append(o)
+    
+    # Always allow Vercel subdomains
+    processed_origins.append(re.compile(r"https://.*\.vercel\.app"))
 
     CORS(
         app,
@@ -35,6 +44,14 @@ def create_app(env: str = None) -> Flask:
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     )
+
+    # Logging Hook for debugging CORS
+    from flask import request
+    @app.before_request
+    def log_request_info():
+        origin = request.headers.get("Origin")
+        if origin:
+            app.logger.info(f"Incoming Request Origin: {origin}")
 
     # ── Blueprints / Routes ───────────────────────────────────────────────────
     from routes.auth    import auth_bp
