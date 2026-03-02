@@ -3,7 +3,7 @@
 // We'll use the current host but swap the port to 5000
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? `${window.location.protocol}//${window.location.hostname}:5000/api`
-  : 'https://healthflow-backend-56f7.onrender.com/api'; // Placeholder for Render
+  : 'https://healthflow-a9q7.onrender.com/api';
 
 console.log(`[Config] API_BASE: ${API_BASE}`);
 
