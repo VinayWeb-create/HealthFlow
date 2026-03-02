@@ -14,7 +14,7 @@ class Config:
     PERMANENT_SESSION_LIFETIME = timedelta(days=30)
     CORS_ORIGINS = os.environ.get(
         "CORS_ORIGINS",
-        "https://health-flow-ten.vercel.app,http://localhost:3000,http://localhost:5500,http://127.0.0.1:5500,http://localhost:8080,null"
+        "https://health-flow-ten.vercel.app,re:https://.*\.vercel\.app,http://localhost:3000,http://localhost:5500,http://127.0.0.1:5500,http://localhost:8080,null"
     ).split(",")
 
 class DevelopmentConfig(Config):

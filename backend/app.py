@@ -11,7 +11,7 @@ Or with gunicorn (production):
     gunicorn app:app --bind 0.0.0.0:5000 --workers 2
 """
 
-import os
+import os, re
 from flask import Flask, jsonify
 from flask_cors import CORS
 
@@ -25,9 +25,12 @@ def create_app(env: str = None) -> Flask:
     app.config.from_object(config.get(env, config["default"]))
 
     # ── CORS ──────────────────────────────────────────────────────────────────
+    origins = app.config.get("CORS_ORIGINS", [])
+    processed_origins = [re.compile(o[3:]) if o.startswith("re:") else o for o in origins]
+
     CORS(
         app,
-        origins=app.config["CORS_ORIGINS"],
+        origins=processed_origins,
         supports_credentials=True,
         allow_headers=["Content-Type", "Authorization"],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
